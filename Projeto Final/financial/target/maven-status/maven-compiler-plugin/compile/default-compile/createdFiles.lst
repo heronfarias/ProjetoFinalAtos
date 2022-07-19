@@ -1,0 +1,8 @@
+com\financial\financial\controller\FinanceiroController.class
+com\financial\financial\model\entities\Passivo.class
+com\financial\financial\model\repositories\FinanceiroRepository.class
+com\financial\financial\config\CorsConfiguration.class
+com\financial\financial\model\entities\Financeiro.class
+com\financial\financial\controller\PassivoController.class
+com\financial\financial\FinancialApplication.class
+com\financial\financial\model\repositories\PassivoRepository.class

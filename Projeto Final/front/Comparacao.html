@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="./resources/css/style.css">
+  <script src="/resources/javascript/script.js"></script>
+  <title>Controle Financeiro</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-light m-2 p-1 ">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Projeto Final $aIraF</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="./index.html">Informações</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./ativos.html">Ativos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./passivos.html">Passivos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./Comparacao.html">Comparação</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div>
+    <canvas class="bar-chart"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+
+    <script>
+      var ctx = document.getElementsByClassName("bar-chart");
+
+      function newChart(recebido, gasto) {
+        return new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ["Valores"],
+            datasets: [
+              {
+                label: "Valor de dinheiro recebido.",
+                data: [recebido],
+                borderWidth: 6,
+                borderColor: 'rgba(6,204,6,0.85)',
+                backgroundColor: 'transparent',
+              },
+              {
+                label: "Valor de dinheiro gasto.",
+                data: [gasto],
+                borderWidth: 6,
+                borderColor: 'rgba(77,166,253,0.85)',
+                backgroundColor: 'transparent',
+              }]
+          }
+        });
+      }
+
+      var chart = newChart(0, 0);
+
+
+      function init() {
+        fetch('http://localhost:8080/api/passivo/all', {
+          method: 'GET'
+        })
+          .then(res => res.json())
+          .then(data => {
+
+            var soma = 0;
+
+            for (d of data) {
+              soma += d.valor;
+            }
+
+            chart.data.datasets[1].data = [soma];
+
+            chart.update();
+
+          }
+          );
+
+        fetch('http://localhost:8080/api/financeiro/all', {
+          method: 'GET'
+        })
+          .then(res => res.json())
+          .then(data => {
+
+            var soma = 0;
+
+            for (d of data) {
+              soma += d.valor;
+            }
+
+            chart.data.datasets[0].data = [soma];
+
+            chart.update();
+
+          }
+          );
+      }
+
+      init();
+
+    </script>
+  </div>
+  <div>
+    <h1>Comparação dos valores de ativos e passivos</h1>
+  </div>
+
+</body>
+
+</html>
